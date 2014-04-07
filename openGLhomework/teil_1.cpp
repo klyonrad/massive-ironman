@@ -48,7 +48,7 @@ int main(int argc, char **argv)
    glutInit( &argc, argv );                // GLUT initialisieren
    glutInitDisplayMode( GLUT_SINGLE | GLUT_RGB );        
    glutInitWindowSize( 600, 600 );         // Fenster-Konfiguration
-   glutCreateWindow( "Name_1; Name_2" );   // Fenster-Erzeugung
+   glutCreateWindow( "Luka; Max" );   // Fenster-Erzeugung
    glutDisplayFunc( RenderScene );         // Zeichenfunktion bekannt machen
    glutReshapeFunc( Reshape );
    // TimerCallback registrieren; wird nach 10 msec aufgerufen mit Parameter 0  
