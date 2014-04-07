@@ -15,11 +15,14 @@ void RenderScene() //Zeichenfunktion
    // Hier befindet sich der Code der in jedem Frame ausgefuehrt werden muss
    glLoadIdentity ();   // Aktuelle Model-/View-Transformations-Matrix zuruecksetzen
    glBegin( GL_POLYGON );	
-      glColor4f( 1.0, 0.0, 0.0, 1.0);
-      glVertex3f( -0.5, -0.5, -0.5 );
-      glVertex3f(  0.5, -0.5, -0.5 );
-      glVertex3f(  0.5,  0.5, -0.5 );
-      glVertex3f( -0.5,  0.5, -0.5 );
+      glColor4f( 1.0, 0.0, 0.0, 1.0); // bottom left
+      glVertex3f( -0.5, -0.5, -0.5 ); // actually red is more warm, but who cares...
+	  glColor4f( 0, 0, 1, 0); // blue is the warmest color
+      glVertex3f(  0.5, -0.5, -0.5 ); // bottom right
+	  glColor4f( 0, 0, 1, 0); // blue is the warmest color
+      glVertex3f(  0.5,  0.5, -0.5 ); // upper right
+	  glColor4f( 0, 0, 1, 0); // blue is the warmest color
+      glVertex3f( -0.5,  0.5, -0.5 ); // upper left
    glEnd();
    glFlush(); //Buffer leeren   
 }
