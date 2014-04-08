@@ -22,6 +22,7 @@ void RenderScene() //Zeichenfunktion
 	glLoadIdentity ();   // Aktuelle Model-/View-Transformations-Matrix zuruecksetzen
 	Wuerfel(0.4);
 	glFlush(); //Buffer leeren   
+	gluLookAt (/*eye:*/0, 0, 1, /*center:*/0, 0, 0, /*up-vector:*/0, 1, 0);
 
 }
 
@@ -30,11 +31,11 @@ void Reshape(int width,int height)
 	/* Hier finden die Reaktionen auf eine Veränderung der Größe des Graphikfensters statt */
 	
 	// kopiert von Aufgabestellung:
-	glMatrixMode(GL_PROJECTION);  // Matrix für Transformation: Frustum->viewport 	
-	glLoadIdentity ();  // Aktuelle Transformations-Matrix zuruecksetzen 
-	glViewport(0,0,width,height); // Viewport definieren 	 
-	glOrtho( -1., 1., -1., 1., 0.0, 1.0); // Frustum definieren (siehe unten)	
-	glMatrixMode(GL_MODELVIEW); // Matrix für Modellierung/Viewing 
+	glMatrixMode(GL_PROJECTION);	// Matrix für Transformation: Frustum->viewport 	
+	glLoadIdentity ();				// Aktuelle Transformations-Matrix zuruecksetzen 
+	glViewport(0,0,width,height);	// Viewport definieren 	 
+	glOrtho( -1, 1, -1, 1, -1, 2);	// Frustum definieren (siehe unten)	
+	glMatrixMode(GL_MODELVIEW);		// Matrix für Modellierung/Viewing 
 }
 
 void Animate (int value)    
