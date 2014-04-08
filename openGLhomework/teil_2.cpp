@@ -20,10 +20,9 @@ void RenderScene() //Zeichenfunktion
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glLoadIdentity ();   // Aktuelle Model-/View-Transformations-Matrix zuruecksetzen
-			gluLookAt (0, 1, 1, 
+	gluLookAt (1, 0, 0, 
 		0, 0, 0, 
-		0, 1, -1);
-
+		0, 1, 0);
 	Wuerfel(0.4);
 	glFlush(); //Buffer leeren   
 
@@ -39,7 +38,7 @@ void Reshape(int width,int height)
 	glLoadIdentity ();				// Aktuelle Transformations-Matrix zuruecksetzen 
 	glViewport(0,0,width,height);	// Viewport definieren 	 
 	glOrtho( -1, 1, -1, 1, 
-		0, 2);	// Frustum definieren (siehe unten)	
+		0, 0.81);	// Frustum definieren (siehe unten)	
 	glMatrixMode(GL_MODELVIEW);		// Matrix für Modellierung/Viewing 
 }
 
