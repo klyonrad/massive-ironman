@@ -8,12 +8,16 @@ void Init()
 {
 	// Hier finden jene Aktionen statt, die zum Programmstart einmalig 
 	// durchgeführt werden müssen	
+	glEnable(GL_DEPTH_TEST);
+	glClearDepth(1.0);
 	glClearColor(1, 0.5, 0 , 0); // sets the background color to: orange 
 }
 
 void RenderScene() //Zeichenfunktion
 {
 	// Hier befindet sich der Code der in jedem Frame ausgefuehrt werden muss
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	glLoadIdentity ();   // Aktuelle Model-/View-Transformations-Matrix zuruecksetzen
 	glBegin( GL_POLYGON ); {
 		glColor4f( 0., 1., 0., 1.);
@@ -35,21 +39,27 @@ void RenderScene() //Zeichenfunktion
 	}
 	glEnd(); 
 	glFlush(); //Buffer leeren   
-	glClear(GL_COLOR_BUFFER_BIT); // clears background
+
 }
 
 void Reshape(int width,int height)
 {
-	// Hier finden die Reaktionen auf eine Veränderung der Größe des 
-	// Graphikfensters statt
+	/* Hier finden die Reaktionen auf eine Veränderung der Größe des Graphikfensters statt */
+	
+	// kopiert von Aufgabestellung:
+	glMatrixMode(GL_PROJECTION);  // Matrix für Transformation: Frustum->viewport 	
+	glLoadIdentity ();  // Aktuelle Transformations-Matrix zuruecksetzen 
+	glViewport(0,0,width,height); // Viewport definieren 	 
+	glOrtho( -1., 1., -1., 1., 0.3, 1.3); // Frustum definieren (siehe unten)	
+	glMatrixMode(GL_MODELVIEW); // Matrix für Modellierung/Viewing 
 }
 
 void Animate (int value)    
 {
-	// Hier werden Berechnungen durchgeführt, die zu einer Animation der Szene  
-	// erforderlich sind. Dieser Prozess läuft im Hintergrund und wird alle 
-	// 1000 msec aufgerufen. Der Parameter "value" wird einfach nur um eins 
-	// inkrementiert und dem Callback wieder uebergeben. 
+	/* Hier werden Berechnungen durchgeführt, die zu einer Animation der Szene  
+	erforderlich sind. Dieser Prozess läuft im Hintergrund und wird alle 
+	1000 msec aufgerufen. Der Parameter "value" wird einfach nur um eins 
+	inkrementiert und dem Callback wieder uebergeben. */
 	std::cout << "value=" << value << std::endl;
 	// RenderScene aufrufen
 	glutPostRedisplay();
@@ -60,7 +70,7 @@ void Animate (int value)
 int main(int argc, char **argv)
 {
 	glutInit( &argc, argv );                // GLUT initialisieren
-	glutInitDisplayMode( GLUT_SINGLE | GLUT_RGB );        
+	glutInitDisplayMode( GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);        
 	glutInitWindowSize( 600, 600 );         // Fenster-Konfiguration
 	glutCreateWindow( "Luka; Max" );   // Fenster-Erzeugung
 	glutDisplayFunc( RenderScene );         // Zeichenfunktion bekannt machen
