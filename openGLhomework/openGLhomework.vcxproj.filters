@@ -18,8 +18,16 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="teil_1.cpp">
+    <ClCompile Include="wuerfel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="teil_2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="wuerfel.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

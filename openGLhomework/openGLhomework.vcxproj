@@ -86,7 +86,11 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="teil_1.cpp" />
+    <ClCompile Include="teil_2.cpp" />
+    <ClCompile Include="wuerfel.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="wuerfel.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
