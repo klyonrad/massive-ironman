@@ -3,7 +3,7 @@
 
 #include <iostream> 
 #include <GL/freeglut.h>      //lädt alles für OpenGL
-#include "../../OpenGL_SoSe_14/Wuerfel.h"
+#include "wuerfel.hpp"
 
 float fRotation = 0.0;		//ih globale Variable
 bool down = true;
