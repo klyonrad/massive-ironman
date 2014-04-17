@@ -29,7 +29,8 @@ void RenderScene() //Zeichenfunktion
 	
 	//Drehung
 	glTranslatef(0.1, 0.1, 0);
-	glRotatef( fRotation, 0, 0, 1.);			//Ohne Push und Pop kann ich auch beide hier drehen und spare 1 Zeile / Operation
+	glRotatef( fRotation, 0, 0, 1);			//Ohne Push und Pop kann ich auch beide hier drehen und spare 1 Zeile / Operation
+	
 	glTranslatef(0.1, -0.1, 0);
 
 	glPushMatrix();
@@ -43,7 +44,7 @@ void RenderScene() //Zeichenfunktion
 
 	//Unterarm
 	glTranslatef(0.2,0,0);
-	glScalef(1.5, .5, .5);
+	glScalef(1.5, 0.5, 0.5);
 	Wuerfel(0.4);
 
 	glutSwapBuffers();
