@@ -1,8 +1,8 @@
-// GD-Praktikum:   teil_1.cpp  (Teil 1: Start-Programm)
+ï»¿// GD-Praktikum:   teil_1.cpp  (Teil 1: Start-Programm)
 // Hergenroether / Groch    Last Update: 29.07.2011
 
 #include <iostream> 
-#include <GL/freeglut.h>      //lädt alles für OpenGL
+#include <GL/freeglut.h>      //lÃ¤dt alles fÃ¼r OpenGL
 #include "wuerfel.hpp"
 
 float fRotation = 0.0;		//ih globale Variable
@@ -11,7 +11,7 @@ bool down = true;
 void Init()	
 {
    // Hier finden jene Aktionen statt, die zum Programmstart einmalig
-   // durchgeführt werden müssen
+   // durchgefÃ¼hrt werden mÃ¼ssen
 	glEnable(GL_DEPTH_TEST);
 	glClearDepth(1.0);
 }
@@ -21,7 +21,7 @@ void RenderScene() //Zeichenfunktion
    // Hier befindet sich der Code der in jedem Frame ausgefuehrt werden muss
 	glLoadIdentity ();   // Aktuelle Model-/View-Transformations-Matrix zuruecksetzen
 
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		//Erweiterung für die Z -Achse
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		//Erweiterung fÃ¼r die Z -Achse
 	glClearColor( 1., 0.5, 0.0, 1.0 );
 	
 	glutWireCube(0.2);
@@ -53,9 +53,9 @@ void RenderScene() //Zeichenfunktion
 
 void Reshape(int width,int height)
 {
-   // Hier finden die Reaktionen auf eine Veränderung der Größe des 
+   // Hier finden die Reaktionen auf eine VerÃ¤nderung der GrÃ¶ÃŸe des 
    // Graphikfensters statt
-	// Matrix für Transformation: Frustum->viewport
+	// Matrix fÃ¼r Transformation: Frustum->viewport
 	glMatrixMode(GL_PROJECTION);
 	// Aktuelle Transformations-Matrix zuruecksetzen
 	glLoadIdentity ();
@@ -64,22 +64,22 @@ void Reshape(int width,int height)
 	// Frustum definieren (siehe unten)
 
 	//11a:
-	glOrtho( -1.4, 1.4, -1.4, 1.4, 0.0, 3.0);				//Größerer Sichtbereich
-	gluLookAt ( 1., 1., 1., 0., 0., 0., 0., 1., 0.);		//Betrachte den Würfel von Vorne Oben
+	glOrtho( -1.4, 1.4, -1.4, 1.4, 0.0, 3.0);				//GrÃ¶ÃŸerer Sichtbereich
+	gluLookAt ( 1., 1., 1., 0., 0., 0., 0., 1., 0.);		//Betrachte den WÃ¼rfel von Vorne Oben
 
-	// Matrix für Modellierung/Viewing
+	// Matrix fÃ¼r Modellierung/Viewing
 	glMatrixMode(GL_MODELVIEW);
 }
 
 void Animate (int value)    
 {
-   // Hier werden Berechnungen durchgeführt, die zu einer Animation der Szene  
-   // erforderlich sind. Dieser Prozess läuft im Hintergrund und wird alle 
+   // Hier werden Berechnungen durchgefÃ¼hrt, die zu einer Animation der Szene  
+   // erforderlich sind. Dieser Prozess lÃ¤uft im Hintergrund und wird alle 
    // 100 msec aufgerufen. Der Parameter "value" wird einfach nur um eins 
    // inkrementiert und dem Callback wieder uebergeben. 
    std::cout << "value=" << value << std::endl;
    
-   //Realistische Rotation um 175°
+   //Realistische Rotation um 175Â°
    if(down){
 	   if(fRotation == -85.0)
 		   down = false;
@@ -90,7 +90,7 @@ void Animate (int value)
 		   down = true;
 	   fRotation += 0.5;
    }
-   //Originale Rotation 360°
+   //Originale Rotation 360Â°
    /*
    fRotation = fRotation - 1.0; // Rotationswinkel aendern
    if ( fRotation <= 0.0) {
@@ -108,7 +108,7 @@ void Animate (int value)
 int main(int argc, char **argv)
 {
    glutInit( &argc, argv );                // GLUT initialisieren
-   glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGB |GLUT_DEPTH);      //Erweiterung für die Z Achse  
+   glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGB |GLUT_DEPTH);      //Erweiterung fÃ¼r die Z Achse  
    glutInitWindowSize( 600, 600 );         // Fenster-Konfiguration
    glutCreateWindow( "Luka; Max" );   // Fenster-Erzeugung
    glutDisplayFunc( RenderScene );         // Zeichenfunktion bekannt machen
