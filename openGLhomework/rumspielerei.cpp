@@ -44,7 +44,7 @@ void kugelgebilde() {
 	glPopMatrix();
 }
 
-void kugelReihe(int breite) { // laaaaaag
+void kugelReihe(int breite) { // laaaaaag with AMD A10-5800K.
 	for (int i = -breite; i <= breite; i++) {
 		glPushMatrix();
 		glTranslatef(i, 0, 0);
@@ -91,7 +91,7 @@ void RenderScene()
 
 	glPopMatrix();
 
-	kugelReihe(1);
+	kugelReihe(4);
 
 
 
