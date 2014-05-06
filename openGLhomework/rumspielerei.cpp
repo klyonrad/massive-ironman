@@ -35,7 +35,7 @@ void RenderScene() //Zeichenfunktion
 		glTranslatef(0.1, -0.1, 0);
 	}
 
-	glTranslatef(0, 1, 0);
+	glTranslatef(0, -1, 0);
 
 	glutWireCube(0.4);
 	glutWireCube(0.6);
@@ -85,7 +85,8 @@ void Reshape(int width,int height)
 	// Frustum definieren (siehe unten)
 
 	//11a:
-	glOrtho( -1.4, 1.4, -1.4, 1.4, 0.0, 3.0);				//Größerer Sichtbereich
+	glOrtho( -1.4, 1.4, -1.4, 1.4, 
+		0, 3);				//Größerer Sichtbereich
 	gluLookAt ( 1., 1., 1., 0., 0., 0., 0., 1., 0.);		//Betrachte den Würfel von Vorne Oben
 
 	// Matrix für Modellierung/Viewing
