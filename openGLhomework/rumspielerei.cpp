@@ -47,7 +47,7 @@ void kugelgebilde() {
 	glPopMatrix();
 }
 
-void kugelReihe(int breite) { // laaaaaag
+void kugelReihe(int breite) { // laaaaaag with AMD A10 APU
 	for (int i = -breite; i <= breite; i++) {
 		glPushMatrix();
 		glTranslatef(i, 0, 0);
@@ -73,12 +73,9 @@ void RenderScene()
    	  glClearColor(0.,0.,1.0,1.0);
 	  gluLookAt(0.0,-8.5+5,15.,0.,0.,0.,0.,1.,0.);
 	  circulate += 0.5;
-	   glRotatef(circulate,0.0,1.0,0.0);
+	   glRotatef(circulate,0.0,1.0,0.0); // rotate ALL the things!
 	  
-	  glPushMatrix();
-	  
-	  //glTranslatef(0.0, sin(circle*PI/180)+1 ,0.0); // Das rollende Ding soll sich auf und ab bewegen
-	  
+	  glPushMatrix();	  	  
 	  glPushMatrix();
 	  
 		glTranslatef(-5, 0, 0); // Kugelgebilde nach links verschieben
@@ -99,10 +96,6 @@ void RenderScene()
 	glPopMatrix();
 
 	kugelReihe(4);
-
-
-
-
 	  
 	  glPushMatrix();
 	  glColor4f(1.0,0.5,0.0,0.3);
@@ -156,7 +149,7 @@ int main(int argc, char **argv)
    glutInit( &argc, argv );                // GLUT initialisieren
    glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH );
    glutInitWindowSize( 600, 600 );         // Fenster-Konfiguration
-   glutCreateWindow( "kette" );   // Fenster-Erzeugung
+   glutCreateWindow( "Klick-Klack" );   // Fenster-Erzeugung
    glutDisplayFunc( RenderScene );         // Zeichenfunktion bekannt machen
    glutReshapeFunc( Reshape );
    // TimerCallback registrieren; wird nach 10 msec aufgerufen mit Parameter 0  
