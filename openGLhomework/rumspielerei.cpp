@@ -33,15 +33,15 @@ void boden() { // completely fromjannis
 void kugelgebilde() {
 	glPushMatrix();
 	{
-	  glColor4f(0.0,1.,0.,0.75);	  
-	  glutSolidSphere(0.1,10,10);	  
-	  glTranslatef(0.0,-1,0.0);
-  	  glutSolidSphere(0.1,10,10);
-  	  glTranslatef(0.0,-1,0.0);
-  	  glutSolidSphere(0.1,10,10);
-  	  glTranslatef(0.0,-1,0.0);
-  	  glutSolidSphere(0.1,10,10);
-	  glTranslatef(0.0,-1.25,0.0);
+	  glPushMatrix();
+		glColor4f(0.2,0.2,0.2,1.);
+		glTranslatef(0.0,-1.5,0.0);
+		glScalef(1.0,30.0,1.0);
+		glutSolidCube(0.1);
+	  glPopMatrix();
+	  
+	  glColor4f(0.0,1.,0.,0.75);	
+	  glTranslatef(0.0,-3,0.0);
 	  glutSolidSphere(0.5,100,100);
 	}
 	glPopMatrix();
@@ -72,6 +72,7 @@ void RenderScene()
    	     	  
    	  glClearColor(0.,0.,1.0,1.0);
 	  gluLookAt(0.0,-8.5+5,15.,0.,0.,0.,0.,1.,0.);
+	  boden();
 	  circulate += 0.5;
 	   glRotatef(circulate,0.0,1.0,0.0);
 	  
@@ -88,31 +89,25 @@ void RenderScene()
 		kugelgebilde();
 		
 
-
-	glPopMatrix();
+	  glPopMatrix();
 		glTranslatef(5, 0, 0); // Kugelgebilde nach rechts verschieben
 		if(!leftball){
 			glRotatef(-angle,0.0,0.0,1.0);
 		}
 		kugelgebilde();
 
-	glPopMatrix();
-
-	kugelReihe(4);
-
-
-
-
-	  
-	  glPushMatrix();
-	  glColor4f(1.0,0.5,0.0,0.3);
-	  glScalef(170.0,1.0,1.0);
-	  glutSolidCube(0.1);  // Stange
 	  glPopMatrix();
+
+	  kugelReihe(4);
 	  
+		glPushMatrix();
+			glColor4f(1.0,0.5,0.0,0.3);
+			glScalef(170.0,1.0,1.0);
+			glutSolidCube(0.1);  // Stange
+		glPopMatrix();
 	  
 	  glPopMatrix(); 
-	  boden();
+	  
     
 	  glutSwapBuffers();	
    glFlush(); //Buffer leeren
