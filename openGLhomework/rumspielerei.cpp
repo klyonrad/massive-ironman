@@ -12,7 +12,10 @@ int angle=-75;
 int factor=2;
 int circle=0;
 int camcircle=0;
-float dist=500;
+float circulate = 0.0;
+float dist=100;
+bool leftball = true;
+
 
 
 void boden() { // completely fromjannis
@@ -44,7 +47,7 @@ void kugelgebilde() {
 	glPopMatrix();
 }
 
-void kugelReihe(int breite) { // laaaaaag with AMD A10-5800K.
+void kugelReihe(int breite) { // laaaaaag
 	for (int i = -breite; i <= breite; i++) {
 		glPushMatrix();
 		glTranslatef(i, 0, 0);
@@ -69,8 +72,8 @@ void RenderScene()
    	     	  
    	  glClearColor(0.,0.,1.0,1.0);
 	  gluLookAt(0.0,-8.5+5,15.,0.,0.,0.,0.,1.,0.);
-	  
-	  // glRotatef(-10.0,0.0,1.0,0.0);
+	  circulate += 0.5;
+	   glRotatef(circulate,0.0,1.0,0.0);
 	  
 	  glPushMatrix();
 	  
@@ -79,14 +82,18 @@ void RenderScene()
 	  glPushMatrix();
 	  
 		glTranslatef(-5, 0, 0); // Kugelgebilde nach links verschieben
-		glRotatef(angle,0.0,0.0,1.0);
+		if(leftball){
+			glRotatef(angle,0.0,0.0,1.0);
+		}
 		kugelgebilde();
 		
 
 
 	glPopMatrix();
 		glTranslatef(5, 0, 0); // Kugelgebilde nach rechts verschieben
-		glRotatef(-angle,0.0,0.0,1.0);
+		if(!leftball){
+			glRotatef(-angle,0.0,0.0,1.0);
+		}
 		kugelgebilde();
 
 	glPopMatrix();
@@ -138,6 +145,8 @@ void Animate (int value)
    angle=angle+factor;
    if(angle==1 || angle==-91) // muss ungerade sein, da factor gerade ist
 	   factor=factor*-1;
+   if(angle == 1)
+	   leftball = !leftball;
    // Timer wieder registrieren; Animate wird so nach 100 msec mit value+=1 aufgerufen
    glutTimerFunc(10, Animate, ++value);          
 }
