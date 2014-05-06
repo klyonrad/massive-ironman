@@ -93,8 +93,7 @@ void RenderScene()
 		}
 		kugelgebilde();
 
-<<<<<<< HEAD
-=======
+
 	glPopMatrix();
 
 	kugelReihe(4);
@@ -103,7 +102,6 @@ void RenderScene()
 	  glColor4f(1.0,0.5,0.0,0.3);
 	  glScalef(170.0,1.0,1.0);
 	  glutSolidCube(0.1);  // Stange
->>>>>>> 7f88b136820bf7213de95f04f9a809a1a06c05d1
 	  glPopMatrix();
 
 	  kugelReihe(4);
