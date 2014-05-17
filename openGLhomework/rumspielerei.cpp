@@ -4,28 +4,41 @@
 #include <iostream> 
 #include <cstdlib>
 #include <math.h>
+#include <Windows.h>
 #include <GL/freeglut.h>         //lädt alles für OpenGL
 
 #define PI 3.141592654
 
-int angle=-75;
-int factor=2;
-int circle=0;
-int camcircle=0;
-float circulate = 0.0;
-float dist=100;
+float angle=-75;
+int MAX = (int) angle;
+float factor=2.0;
+float circulate = 1.0;
+float crate = 0.4;
+
 bool leftball = true;
+bool pause = false;
+
+double xpos = 3.0;
+double zpos = 15;
+
+using namespace std;
 
 
+SHORT WINAPI GetAsyncKeyState(
+  _In_  int vKey
+);
 
-void boden() { // completely fromjannis
-	  glPushMatrix(); 
-	  glColor4f(0.5,0.5,0.5,1.0);
+
+void boden() {
+	  glPushMatrix();
+	  
+	  glColor4f(0.5,0.,0.5,1.0);
 	  glBegin(GL_POLYGON);
-	  glVertex3f(-10,-8.5,500);
-	  glVertex3f(10,-8.5,500);
-	  glVertex3f(10,-8.5,-500);
-	  glVertex3f(-10,-8.5,-500);
+	  glNormal3f(0,1,0);
+	  glVertex3f(-50,-8.5,50);
+	  glVertex3f(50,-8.5,50);
+	  glVertex3f(50,-8.5,-50);
+	  glVertex3f(-50,-8.5,-50);
 	  glEnd();
 	  glPopMatrix();
 }
@@ -58,6 +71,18 @@ void kugelReihe(int breite) { // laaaaaag with AMD A10 APU
 
 void Init()	
 {  
+
+	glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHTING);
+	GLfloat light_pos [] = {1,1,1,0};
+	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
+	glEnable(GL_COLOR_MATERIAL);
+
+	glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
+    glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
+    glEnable(GL_TEXTURE_GEN_S);
+    glEnable(GL_TEXTURE_GEN_T);
+
    glEnable(GL_DEPTH_TEST);
    glClearDepth(1.0);
 }
@@ -69,12 +94,13 @@ void RenderScene()
    	  
    	  glEnable(GL_BLEND);
    	  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-   	     	  
+   	  
+	  
    	  glClearColor(0.,0.,1.0,1.0);
-	  gluLookAt(0.0,-8.5+5,15.,0.,0.,0.,0.,1.,0.);
+	  gluLookAt(xpos, 3, zpos,0.,0.,0.,0.,1.,0.);
 	  boden();
-	  circulate += 0.5;
-	   glRotatef(circulate,0.0,1.0,0.0); // rotate ALL the things!
+	  circulate += crate;
+	  glRotatef(circulate,0.0,1.0,0.0); // rotate ALL the things!
 	  
 	  glPushMatrix();	  	  
 	  glPushMatrix();
@@ -92,7 +118,7 @@ void RenderScene()
 			glRotatef(-angle,0.0,0.0,1.0);
 		}
 		kugelgebilde();
-
+		
 
 	glPopMatrix();
 
@@ -102,9 +128,10 @@ void RenderScene()
 	  glColor4f(1.0,0.5,0.0,0.3);
 	  glScalef(170.0,1.0,1.0);
 	  glutSolidCube(0.1);  // Stange
-	  glPopMatrix();
 
-	  kugelReihe(4);
+	  glPopMatrix();
+	 
+	  kugelReihe(1);
 	  
 		glPushMatrix();
 			glColor4f(1.0,0.5,0.0,0.3);
@@ -114,10 +141,13 @@ void RenderScene()
 	  
 	  glPopMatrix(); 
 	  
-    
 	  glutSwapBuffers();	
    glFlush(); //Buffer leeren
+}
 
+double round(double x){
+	x = (int)(x*100+0.5)/100.0;
+	return x;
 }
 
 void Reshape(int width,int height)
@@ -132,24 +162,57 @@ void Reshape(int width,int height)
 	glMatrixMode(GL_MODELVIEW);
 }
 
+void keyEvents(){
+	if(GetAsyncKeyState(0x13))
+	   pause = !pause;
+	if(GetAsyncKeyState(0x1b))		//Esc beendet
+	   exit(0);
+   if(GetAsyncKeyState(0x57))		//Abfragen ob 'W' gedrückt wurde
+	   xpos -= 0.1;
+   if(GetAsyncKeyState(0x53))		//Abfragen ob 'S' gedrückt wurde
+	   xpos += 0.1;
+   if(GetAsyncKeyState(0x44))		//Abfragen ob 'A' gedrückt wurde
+	   zpos -= 0.1;
+   if(GetAsyncKeyState(0x41))		//Abfragen ob 'D' gedrückt wurde
+	   zpos += 0.1;
+   if(GetAsyncKeyState(0x20)){      //Abfragen ob 'Space' gedrückt wurde
+	   angle = MAX = -75;			//Neustart
+	   factor = 2;
+   }
+
+   if(GetAsyncKeyState(0x6b))		// '+' beschleunigt
+	   crate += 0.1;
+   if(GetAsyncKeyState(0x6d))		// '-' verlangsamt
+	   crate -= 0.1;
+}
+
+
 void Animate (int value)    
 {  
    // RenderScene aufrufen
    glutPostRedisplay();
    
-   circle=(circle+8) % 360;   
-   camcircle=(camcircle+1) % 360;   
+   keyEvents();
 
-   dist+=0.75;
-   dist=(dist >10) ? -500 : dist;
+   if(!pause){
+	   if(crate == 0)
+		   crate = 0.4;
+	   if(abs(MAX) <= 4)				//Stoppen wenn Kugeln ausgependelt sind
+		   factor = angle =  0;
+		angle=angle + factor * round(cos(angle * PI / 180));
 
-   angle=angle+factor;
-   if(angle==1 || angle==-91) // muss ungerade sein, da factor gerade ist
+	if(((int)angle<=1 && (int) angle>= 0) || ((int) angle< MAX + 1)  ) // wegen Ungenauigkeit	    
 	   factor=factor*-1;
-   if(angle == 1)
+	if(((int)angle<=1 && (int) angle>= 0)){
 	   leftball = !leftball;
-   // Timer wieder registrieren; Animate wird so nach 100 msec mit value+=1 aufgerufen
-   glutTimerFunc(10, Animate, ++value);          
+	   MAX *= 0.96;
+	}
+	// Timer wieder registrieren; Animate wird so nach 10 msec mit value+=1 aufgerufen
+   }else{
+	   crate = 0;
+   }
+   glutTimerFunc(20, Animate, ++value);  
+        
 }
 
 int main(int argc, char **argv)
