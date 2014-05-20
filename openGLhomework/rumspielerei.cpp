@@ -15,11 +15,15 @@ float factor=2.0;
 float circulate = 1.0;
 float crate = 0.4;
 
+bool start =  true;
 bool leftball = true;
 bool pause = false;
 
 double xpos = 3.0;
 double zpos = 15;
+
+GLuint himmelnr = 0;
+BYTE* hibuf;
 
 using namespace std;
 
@@ -28,10 +32,105 @@ SHORT WINAPI GetAsyncKeyState(
   _In_  int vKey
 );
 
+typedef struct tagRGBTriplet
+{
+	BYTE red;
+	BYTE green;
+	BYTE blue;
+} RGBTriplet;
+
+BYTE* ConvertBMPToRGBBuffer ( BYTE* Buffer, int width, int height )
+{
+	int padding = 0;
+	int scanlinebytes = width * 3;
+	while ( ( scanlinebytes + padding ) % 4 != 0 )
+		padding++;
+	int psw = scanlinebytes + padding;
+	BYTE* newbuf = new BYTE[width*height*3];
+	long bufpos = 0;   
+	long newpos = 0;
+	for ( int y = 0; y < height; y++ )
+		for ( int x = 0; x < 3 * width; x+=3 )
+		{
+			newpos = y * 3 * width + x;     
+			bufpos = ( height - y - 1 ) * psw + x;
+
+			newbuf[newpos] = Buffer[bufpos + 2];       
+			newbuf[newpos + 1] = Buffer[bufpos+1]; 
+			newbuf[newpos + 2] = Buffer[bufpos];     
+		}
+		delete Buffer;
+
+	return newbuf;
+}
+
+BYTE* LoadBMP ( int* width, int* height, long* size, LPCTSTR bmpfile )
+{
+	BITMAPFILEHEADER bmpheader;
+	BITMAPINFOHEADER bmpinfo;
+	DWORD bytesread;
+	HANDLE file = CreateFile ( bmpfile , GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN, NULL );
+	ReadFile ( file, &bmpheader, sizeof ( BITMAPFILEHEADER ), &bytesread, NULL );
+
+	ReadFile ( file, &bmpinfo, sizeof ( BITMAPINFOHEADER ), &bytesread, NULL );
+
+	*width   = bmpinfo.biWidth;
+	*height  = abs ( bmpinfo.biHeight );
+	*size = bmpheader.bfSize - bmpheader.bfOffBits;
+	BYTE* buffer = new BYTE[ *size ];
+	ReadFile ( file, buffer, *size, &bytesread, NULL );
+	
+	CloseHandle ( file );
+	glPixelStorei ( GL_UNPACK_ALIGNMENT,   4 );
+	glPixelStorei ( GL_UNPACK_ROW_LENGTH,  0 );
+	glPixelStorei ( GL_UNPACK_SKIP_ROWS,   0 );
+	glPixelStorei ( GL_UNPACK_SKIP_PIXELS, 0 );
+	BYTE *ergbuffer = ConvertBMPToRGBBuffer( buffer, *width, *height );
+	return ergbuffer;
+}
+
+void textur(){
+	
+	
+
+    // Textur in Karte erzeugen
+    glGenTextures(1, &himmelnr);
+
+    // Mit unserer erzeugten Textur arbeiten
+    glBindTexture(GL_TEXTURE_2D, himmelnr);
+	static int width;
+	static int height;
+	static long size;
+	if(hibuf == NULL)
+		hibuf = LoadBMP(&width, &height, &size, L"himmel2.bmp");
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	 // Textur in die Grafikkarte hochladen
+    glTexImage2D(GL_TEXTURE_2D,     // 2D Textur
+                 0,                 // Detailsstufe (für Mipmaps)
+                 3,                 // Farbkomponenten
+                 width,				// Breite
+                 height,			// Höhe
+                 0,                 // Rand
+				 GL_RGB,			// Pixel-Format
+                 GL_UNSIGNED_BYTE,  // Datentyp der Komponenten (0 bis 255)
+                 hibuf);           // Pixel-Puffer
+	
+}
+
+void himmel(){
+	glPushMatrix();
+		glColor4f(3.0f, 3.0f, 3.0f, 1.0f);
+		textur();
+		glutSolidSphere(50,100,100);
+		glDeleteTextures(1, &himmelnr);
+	glPopMatrix();
+}
+
 
 void boden() {
 	  glPushMatrix();
-	  
 	  glColor4f(0.5,0.,0.5,1.0);
 	  glBegin(GL_POLYGON);
 	  glNormal3f(0,1,0);
@@ -71,13 +170,14 @@ void kugelReihe(int breite) { // laaaaaag with AMD A10 APU
 
 void Init()	
 {  
-
 	glEnable(GL_LIGHT0);
 	glEnable(GL_LIGHTING);
-	GLfloat light_pos [] = {1,1,1,0};
+	GLfloat light_pos [] = {1,1,0,0};
 	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
 	glEnable(GL_COLOR_MATERIAL);
 
+	// OpenGL Texturen aktivieren
+    glEnable(GL_TEXTURE_2D);
 	glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
     glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
     glEnable(GL_TEXTURE_GEN_S);
@@ -95,10 +195,14 @@ void RenderScene()
    	  glEnable(GL_BLEND);
    	  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
    	  
+	 
 	  
-   	  glClearColor(0.,0.,1.0,1.0);
+   	  glClearColor(0.,0.2,1.0,1.0);
 	  gluLookAt(xpos, 3, zpos,0.,0.,0.,0.,1.,0.);
+
+	  himmel();
 	  boden();
+	  
 	  circulate += crate;
 	  glRotatef(circulate,0.0,1.0,0.0); // rotate ALL the things!
 	  
